@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Coordenadas(models.Model):
+class Coordenada(models.Model):
     latitud = models.FloatField()
     longitud = models.FloatField()
     def __str__(self):
@@ -53,7 +53,7 @@ class Cliente(models.Model):
 
 class ZonaCoordenada(models.Model):
     idZona = models.ForeignKey(Zona, on_delete=models.CASCADE)
-    idCoordenadas = models.ForeignKey(Coordenadas, on_delete=models.CASCADE)
+    idCoordenadas = models.ForeignKey(Coordenada, on_delete=models.CASCADE)
 
     def __str__(self):
         return '%s %s' % (self.idZona, self.idCoordenadas)

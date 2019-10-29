@@ -1,20 +1,20 @@
 from django.contrib import admin
-from .models import Coordenadas, Zona, Usuario, Cliente, ZonasCoordenadas, Trabajador, ZonasTrabajador, DatosFacturacion, Marcas, Categorias, FormaPago, Productos, CabeceraPedido, DetallePedido, Pagos
+from .models import Coordenada, Zona, Usuario, Cliente, ZonaCoordenada, Trabajador, ZonaTrabajador, DatosFacturacion, Marca, Categoria, FormaPago, Producto, CabeceraPedido, DetallePedido, Pago
 
 # Register your models here.
-admin.site.register(Coordenadas)
+admin.site.register(Coordenada)
 admin.site.register(Zona)
 admin.site.register(Usuario)
 admin.site.register(Cliente)
-admin.site.register(ZonasCoordenadas)
+admin.site.register(ZonaCoordenada)
 admin.site.register(Trabajador)
-admin.site.register(ZonasTrabajador)
+admin.site.register(ZonaTrabajador)
 admin.site.register(DatosFacturacion)
-admin.site.register(Marcas)
-admin.site.register(Categorias)
+admin.site.register(Marca)
+admin.site.register(Categoria)
 admin.site.register(FormaPago)
-admin.site.register(Productos)
+admin.site.register(Producto)
 admin.site.register(CabeceraPedido)
 admin.site.register(DetallePedido)
-admin.site.register(Pagos)
+admin.site.register(Pago)
 
