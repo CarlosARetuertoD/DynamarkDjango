@@ -54,8 +54,11 @@ class ZonasTrabajador(models.Model):
     idTrabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
+
     def __str__(self):
         return '%s %s' % (self.idTrabajador, self.idZona)
+
+
 
 
 class DatosFacturacion(models.Model):
@@ -69,8 +72,13 @@ class DatosFacturacion(models.Model):
 
 class Marcas(models.Model):
     descripcion = models.CharField(max_length = 200)
+
     def __str__(self):
         return self.descripcion
+
+    class Meta:
+        verbose_name_plural = "Marcas de Productos"
+        verbose_name = "Marca"
 
 class Categorias(models.Model):
     descripcion = models.CharField(max_length = 200)
