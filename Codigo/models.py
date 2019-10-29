@@ -7,10 +7,19 @@ class Coordenadas(models.Model):
     def __str__(self):
         return '%s %s' % (self.latitud, self.longitud)
 
+class Meta:
+        verbose_name_plural = "Lista de puntos del mapa"
+        verbose_name = "Punto del mapa"
+
 class Zona(models.Model):
     descripcion = models.CharField(max_length = 200)
+
     def __str__(self):
         return self.descripcion
+    
+    class Meta:
+        verbose_name_plural = "Lista de Zonas"
+        verbose_name = "Zona"
 
 class Usuario(models.Model):
     dni = models.CharField(max_length = 8, primary_key=True)
@@ -22,6 +31,10 @@ class Usuario(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.apellidos, self.nombre)
+    
+    class Meta:
+        verbose_name_plural = "Lista de Usuarios"
+        verbose_name = "Usuario"
 
 class Cliente(models.Model):
     idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
@@ -34,22 +47,35 @@ class Cliente(models.Model):
     def __str__(self):
         return '%s %s' % (self.idUsuario, self.puntaje)
 
-class ZonasCoordenadas(models.Model):
+    class Meta:
+        verbose_name_plural = "Lista de Clientes"
+        verbose_name = "Cliente"
+
+class ZonaCoordenada(models.Model):
     idZona = models.ForeignKey(Zona, on_delete=models.CASCADE)
     idCoordenadas = models.ForeignKey(Coordenadas, on_delete=models.CASCADE)
 
     def __str__(self):
         return '%s %s' % (self.idZona, self.idCoordenadas)
+    
+    class Meta:
+        verbose_name_plural = "Asignacion de Coordenadas a Zonas"
+        verbose_name = "Coordenadas de una zona"
 
 
 class Trabajador(models.Model):
     idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     fecha_inicio = models.DateField()
+
     def __str__(self):
         return '%s %s' % (self.idUsuario, self.fecha_inicio)
+    
+    class Meta:
+        verbose_name_plural = "Trabajadores"
+        verbose_name = "Trabajador"
 
 
-class ZonasTrabajador(models.Model):
+class ZonaTrabajador(models.Model):
     idZona = models.ForeignKey(Zona, on_delete=models.CASCADE)
     idTrabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
     fecha_inicio = models.DateField()
@@ -57,8 +83,10 @@ class ZonasTrabajador(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.idTrabajador, self.idZona)
-
-
+    
+    class Meta:
+        verbose_name_plural = "Zonas Asignadas"
+        verbose_name = "Zona Asignada"
 
 
 class DatosFacturacion(models.Model):
@@ -68,31 +96,44 @@ class DatosFacturacion(models.Model):
 
     def __str__(self):
         return '%s %s %s' % (self.idCliente, self.razon_social, self.ruc)
+    
+    class Meta:
+        verbose_name_plural = "Datos de Facturacion"
+        verbose_name = "Datos de Facturacion"
 
 
-class Marcas(models.Model):
+class Marca(models.Model):
     descripcion = models.CharField(max_length = 200)
 
     def __str__(self):
         return self.descripcion
-
+    
     class Meta:
-        verbose_name_plural = "Marcas de Productos"
+        verbose_name_plural = "Lista de Marcas"
         verbose_name = "Marca"
 
-class Categorias(models.Model):
+class Categoria(models.Model):
     descripcion = models.CharField(max_length = 200)
+
     def __str__(self):
         return self.descripcion
+    
+    class Meta:
+        verbose_name_plural = "Lista de Categorias"
+        verbose_name = "Categoria"
 
 class FormaPago(models.Model):
     descripcion = models.CharField(max_length = 200)
     def __str__(self):
         return self.descripcion
+    
+    class Meta:
+        verbose_name_plural = "Formas de Pago"
+        verbose_name = "Forma de Pago"
 
-class Productos(models.Model):
-    idMarca = models.ForeignKey(Marcas, on_delete=models.CASCADE)
-    idCategoria = models.ForeignKey(Categorias, on_delete=models.CASCADE)
+class Producto(models.Model):
+    idMarca = models.ForeignKey(Marca, on_delete=models.CASCADE)
+    idCategoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     nombre = models.CharField(max_length = 200)
     tipo = models.CharField(max_length = 200)
     presentacion = models.CharField(max_length = 200)
@@ -101,6 +142,10 @@ class Productos(models.Model):
 
     def __str__(self):
         return '%s %s %s' % (self.nombre, self.tipo, self.presentacion)
+
+    class Meta:
+        verbose_name_plural = "Lista de Productos"
+        verbose_name = "Producto"
 
 
 class CabeceraPedido(models.Model):
@@ -112,22 +157,37 @@ class CabeceraPedido(models.Model):
     pagado = models.BooleanField()
     idFormaPago = models.ForeignKey(FormaPago, on_delete=models.CASCADE)
     descuento = models.FloatField()
+
     def __str__(self):
-        return '%s %s' % (self.idCliente, self.idTrabajador)
+        return '%s %s' % (self.idCliente, self.idTrabajador, self.entregado, self.pagado, self.descuento)
+    
+    class Meta:
+        verbose_name_plural = "Cabeceras de Pedidos"
+        verbose_name = "Cabecera de Pedido"
 
 
 class DetallePedido(models.Model):
     idCabeceraPedido = models.ForeignKey(CabeceraPedido, on_delete=models.CASCADE)
-    idProducto = models.ForeignKey(Productos, on_delete=models.CASCADE)
+    idProducto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
+
     def __str__(self):
         return '%s %s' % (self.idProducto, self.cantidad)
+    
+    class Meta:
+        verbose_name_plural = "Detalles Pedidos"
+        verbose_name = "Detalle Pedido"
 
 
-class Pagos(models.Model):
+class Pago(models.Model):
     idCabeceraPedido = models.ForeignKey(CabeceraPedido, on_delete=models.CASCADE)
     idTrabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
     monto = models.FloatField()
     fecha_pago = models.DateField()
+
     def __str__(self):
         return '%s %s' % (self.monto, self.fecha_pago)
+
+    class Meta:
+        verbose_name_plural = "Marcas de Producto"
+        verbose_name = "Marca"
