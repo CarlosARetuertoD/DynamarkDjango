@@ -110,6 +110,7 @@ class Marca(models.Model):
         verbose_name_plural = "Lista de Marcas"
         verbose_name = "Marca"
 
+
 class Categoria(models.Model):
     descripcion = models.CharField(max_length = 200)
 
@@ -129,9 +130,10 @@ class FormaPago(models.Model):
         verbose_name_plural = "Formas de Pago"
         verbose_name = "Forma de Pago"
 
+
 class Producto(models.Model):
     idMarca = models.ForeignKey(Marca, on_delete=models.CASCADE)
-    idCategoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    idCategoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="productos")
     nombre = models.CharField(max_length = 200)
     tipo = models.CharField(max_length = 200)
     presentacion = models.CharField(max_length = 200)
@@ -157,8 +159,6 @@ class CabeceraPedido(models.Model):
     descuento = models.FloatField()
     monto = models.FloatField()
 
-    def __str__(self):
-        return '%s %s %s %s %s %s' % (self.idCliente, self.idTrabajador, self.entregado, self.pagado, self.monto)
     
     class Meta:
         verbose_name_plural = "Cabeceras de Pedidos"
@@ -166,7 +166,7 @@ class CabeceraPedido(models.Model):
 
 
 class DetallePedido(models.Model):
-    idCabeceraPedido = models.ForeignKey(CabeceraPedido, on_delete=models.CASCADE)
+    idCabeceraPedido = models.ForeignKey(CabeceraPedido, on_delete=models.CASCADE , related_name="detalle")
     idProducto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
 
