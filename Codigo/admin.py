@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Coordenada, Zona, Usuario, Cliente, ZonaCoordenada, Trabajador, ZonaTrabajador, DatosFacturacion, Marca, Categoria, FormaPago, Producto, CabeceraPedido, DetallePedido, Pago
+from .models import *
 
 # Register your models here.
 admin.site.register(Coordenada)

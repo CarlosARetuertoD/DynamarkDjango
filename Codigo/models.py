@@ -36,8 +36,7 @@ class Usuario(models.Model):
         verbose_name_plural = "Lista de Usuarios"
         verbose_name = "Usuario"
 
-class Cliente(models.Model):
-    idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+class Cliente(Usuario):
     idZona = models.ForeignKey(Zona, on_delete=models.CASCADE)
     puntaje = models.FloatField()
     latitud = models.FloatField()
@@ -45,7 +44,7 @@ class Cliente(models.Model):
     verificado = models.BooleanField()
 
     def __str__(self):
-        return '%s %s' % (self.idUsuario, self.puntaje)
+        return '%s %s %s' % (self.nombre, self.apellidos, self.puntaje)
 
     class Meta:
         verbose_name_plural = "Lista de Clientes"
@@ -63,12 +62,11 @@ class ZonaCoordenada(models.Model):
         verbose_name = "Coordenadas de una zona"
 
 
-class Trabajador(models.Model):
-    idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+class Trabajador(Usuario):
     fecha_inicio = models.DateField()
 
     def __str__(self):
-        return '%s %s' % (self.idUsuario, self.fecha_inicio)
+        return '%s %s %s' % (self.nombre, self.apellidos, self.fecha_inicio)
     
     class Meta:
         verbose_name_plural = "Trabajadores"
@@ -157,9 +155,10 @@ class CabeceraPedido(models.Model):
     pagado = models.BooleanField()
     idFormaPago = models.ForeignKey(FormaPago, on_delete=models.CASCADE)
     descuento = models.FloatField()
+    monto = models.FloatField()
 
     def __str__(self):
-        return '%s %s' % (self.idCliente, self.idTrabajador, self.entregado, self.pagado, self.descuento)
+        return '%s %s %s %s %s %s' % (self.idCliente, self.idTrabajador, self.entregado, self.pagado, self.monto)
     
     class Meta:
         verbose_name_plural = "Cabeceras de Pedidos"
