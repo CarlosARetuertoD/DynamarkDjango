@@ -1,25 +1,27 @@
 from django.db import models
 
 # Create your models here.
-class Coordenada(models.Model):
-    latitud = models.FloatField()
-    longitud = models.FloatField()
-    def __str__(self):
-        return '%s %s' % (self.latitud, self.longitud)
-
-class Meta:
-        verbose_name_plural = "Lista de puntos del mapa"
-        verbose_name = "Punto del mapa"
 
 class Zona(models.Model):
     descripcion = models.CharField(max_length = 200)
 
     def __str__(self):
         return self.descripcion
-    
+
     class Meta:
         verbose_name_plural = "Lista de Zonas"
         verbose_name = "Zona"
+
+
+class Coordenada(models.Model):
+    zona = models.ForeignKey(Zona, on_delete=models.CASCADE, related_name="coordenadas")
+    orden_polygono = models.IntegerField()
+    latitud = models.FloatField()
+    longitud = models.FloatField()
+
+    def __str__(self):
+        return '%s %s %s' % (self.orden_polygono, self.latitud, self.longitud)
+
 
 class Usuario(models.Model):
     dni = models.CharField(max_length = 8, primary_key=True)
@@ -36,8 +38,9 @@ class Usuario(models.Model):
         verbose_name_plural = "Lista de Usuarios"
         verbose_name = "Usuario"
 
+
 class Cliente(Usuario):
-    idZona = models.ForeignKey(Zona, on_delete=models.CASCADE)
+    zona = models.ForeignKey(Zona, on_delete=models.CASCADE)
     puntaje = models.FloatField()
     latitud = models.FloatField()
     longitud = models.FloatField()
@@ -50,16 +53,18 @@ class Cliente(Usuario):
         verbose_name_plural = "Lista de Clientes"
         verbose_name = "Cliente"
 
-class ZonaCoordenada(models.Model):
-    idZona = models.ForeignKey(Zona, on_delete=models.CASCADE)
-    idCoordenadas = models.ForeignKey(Coordenada, on_delete=models.CASCADE)
+
+class DatosFacturacion(models.Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name="datos_facturacion")
+    ruc = models.CharField(max_length = 200)
+    razon_social = models.CharField(max_length = 200)
 
     def __str__(self):
-        return '%s %s' % (self.idZona, self.idCoordenadas)
+        return '%s %s %s' % (self.cliente, self.razon_social, self.ruc)
     
     class Meta:
-        verbose_name_plural = "Asignacion de Coordenadas a Zonas"
-        verbose_name = "Coordenadas de una zona"
+        verbose_name_plural = "Datos de Facturacion"
+        verbose_name = "Datos de Facturacion"
 
 
 class Trabajador(Usuario):
@@ -74,30 +79,17 @@ class Trabajador(Usuario):
 
 
 class ZonaTrabajador(models.Model):
-    idZona = models.ForeignKey(Zona, on_delete=models.CASCADE)
-    idTrabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
+    zona = models.ForeignKey(Zona, on_delete=models.CASCADE)
+    trabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
 
     def __str__(self):
-        return '%s %s' % (self.idTrabajador, self.idZona)
+        return '%s %s' % (self.trabajador, self.zona)
     
     class Meta:
         verbose_name_plural = "Zonas Asignadas"
         verbose_name = "Zona Asignada"
-
-
-class DatosFacturacion(models.Model):
-    idCliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    ruc = models.CharField(max_length = 200)
-    razon_social = models.CharField(max_length = 200)
-
-    def __str__(self):
-        return '%s %s %s' % (self.idCliente, self.razon_social, self.ruc)
-    
-    class Meta:
-        verbose_name_plural = "Datos de Facturacion"
-        verbose_name = "Datos de Facturacion"
 
 
 class Marca(models.Model):
@@ -132,8 +124,8 @@ class FormaPago(models.Model):
 
 
 class Producto(models.Model):
-    idMarca = models.ForeignKey(Marca, on_delete=models.CASCADE)
-    idCategoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="productos")
+    marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="productos")
     nombre = models.CharField(max_length = 200)
     tipo = models.CharField(max_length = 200)
     presentacion = models.CharField(max_length = 200)
@@ -149,29 +141,28 @@ class Producto(models.Model):
 
 
 class CabeceraPedido(models.Model):
-    idCliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    idTrabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    trabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
     fecha_pedido = models.DateField()
     fecha_entrega = models.DateField()
     entregado = models.BooleanField()
     pagado = models.BooleanField()
-    idFormaPago = models.ForeignKey(FormaPago, on_delete=models.CASCADE)
+    formaPago = models.ForeignKey(FormaPago, on_delete=models.CASCADE)
     descuento = models.FloatField()
     monto = models.FloatField()
 
-    
     class Meta:
         verbose_name_plural = "Cabeceras de Pedidos"
         verbose_name = "Cabecera de Pedido"
 
 
 class DetallePedido(models.Model):
-    idCabeceraPedido = models.ForeignKey(CabeceraPedido, on_delete=models.CASCADE , related_name="detalle")
-    idProducto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cabeceraPedido = models.ForeignKey(CabeceraPedido, on_delete=models.CASCADE , related_name="detalle")
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
 
     def __str__(self):
-        return '%s %s' % (self.idProducto, self.cantidad)
+        return '%s %s' % (self.producto, self.cantidad)
     
     class Meta:
         verbose_name_plural = "Detalles Pedidos"
@@ -179,8 +170,8 @@ class DetallePedido(models.Model):
 
 
 class Pago(models.Model):
-    idCabeceraPedido = models.ForeignKey(CabeceraPedido, on_delete=models.CASCADE)
-    idTrabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
+    cabeceraPedido = models.ForeignKey(CabeceraPedido, on_delete=models.CASCADE)
+    trabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
     monto = models.FloatField()
     fecha_pago = models.DateField()
 
@@ -190,3 +181,5 @@ class Pago(models.Model):
     class Meta:
         verbose_name_plural = "Marcas de Producto"
         verbose_name = "Marca"
+
+
