@@ -5,34 +5,23 @@ from .models import *
 from .serializers import *
 
 def index(request):
-    return HttpResponse("Hola Codigo")
+    return HttpResponse("Di Lorenzo Application")
 
 
 class ClienteList(generics.ListAPIView):
     serializer_class = ClienteSerializer
     queryset = Cliente.objects.all()
 
+class ProductosList(generics.ListAPIView):
+    serializer_class = ProductosSerializer
+    queryset = Producto.objects.all()
 
-class TrabajadorList(generics.ListCreateAPIView):
+class PedidosList(generics.ListAPIView):
+    serializer_class = CabeceraPedidoSerializer
+    queryset = CabeceraPedido.objects.all()
+
+class TrabajadoresList(generics.ListAPIView):
     serializer_class = TrabajadorSerializer
     queryset = Trabajador.objects.all()
 
 
-class CategoriaList(generics.ListCreateAPIView):
-    serializer_class = CategoriaSerializer
-    queryset = Categoria.objects.all()
-
-
-class ProductoList(generics.ListCreateAPIView):
-    serializer_class = ProductoSerializer
-    queryset = Producto.objects.all()
-
-
-class DetalleList(generics.ListAPIView):
-    serializer_class = DetallePedidoSerializer
-    queryset = DetallePedido.objects.all()
-
-
-class CabeceraList(generics.ListAPIView):
-    serializer_class = CabeceraPedidoSerializer
-    queryset = CabeceraPedido.objects.all()

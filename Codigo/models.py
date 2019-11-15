@@ -68,8 +68,10 @@ class DatosFacturacion(models.Model):
 
 
 class Trabajador(Usuario):
+    usuario = models.CharField(max_length = 200)
+    contrasenia = models.CharField(max_length = 200)
     fecha_inicio = models.DateField()
-
+    foto_perfil = models.ImageField()
     def __str__(self):
         return '%s %s %s' % (self.nombre, self.apellidos, self.fecha_inicio)
     
@@ -124,8 +126,8 @@ class FormaPago(models.Model):
 
 
 class Producto(models.Model):
-    marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
-    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="productos")
+    marca = models.ForeignKey(Marca, on_delete=models.CASCADE, related_name="marca")
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="categoria")
     nombre = models.CharField(max_length = 200)
     tipo = models.CharField(max_length = 200)
     presentacion = models.CharField(max_length = 200)
@@ -138,7 +140,6 @@ class Producto(models.Model):
     class Meta:
         verbose_name_plural = "Lista de Productos"
         verbose_name = "Producto"
-
 
 class CabeceraPedido(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
@@ -157,17 +158,15 @@ class CabeceraPedido(models.Model):
 
 
 class DetallePedido(models.Model):
-    cabeceraPedido = models.ForeignKey(CabeceraPedido, on_delete=models.CASCADE , related_name="detalle")
+    cabeceraPedido = models.ForeignKey(CabeceraPedido, on_delete=models.CASCADE,related_name="detalle_pedido")
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
-
     def __str__(self):
         return '%s %s' % (self.producto, self.cantidad)
     
     class Meta:
         verbose_name_plural = "Detalles Pedidos"
         verbose_name = "Detalle Pedido"
-
 
 class Pago(models.Model):
     cabeceraPedido = models.ForeignKey(CabeceraPedido, on_delete=models.CASCADE)
