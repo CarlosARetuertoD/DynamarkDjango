@@ -24,4 +24,8 @@ class TrabajadoresList(generics.ListAPIView):
     serializer_class = TrabajadorSerializer
     queryset = Trabajador.objects.all()
 
+class ZonaList(generics.RetrieveAPIView):
+    serializer_class = ZonaSerializer
+    queryset = Zona.objects.all()
+
 

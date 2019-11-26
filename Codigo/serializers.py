@@ -1,13 +1,13 @@
 from rest_framework import serializers
 from .models import *
 
-class CoordenadaSerialize(serializers.ModelSerializer):
+class CoordenadaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coordenada
         fields = ['latitud', 'longitud','orden_polygono']
 
 class ZonaSerializer(serializers.ModelSerializer):
-    coordenadas = CoordenadaSerialize(many=True)
+    coordenadas = CoordenadaSerializer(many=True)
     class Meta:
         model = Zona
         fields = ['id', 'descripcion', 'coordenadas']
