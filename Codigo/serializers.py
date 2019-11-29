@@ -10,7 +10,15 @@ class ZonaSerializer(serializers.ModelSerializer):
     coordenadas = CoordenadaSerializer(many=True)
     class Meta:
         model = Zona
-        fields = ['id', 'descripcion', 'coordenadas']
+        fields = ['descripcion', 'coordenadas']
+
+
+class ZonaTrabajadorSerializer(serializers.ModelSerializer):
+    zona = ZonaSerializer(many=False)
+    class Meta:
+        model = ZonaTrabajador
+        fields = ['zona','fecha_inicio','fecha_fin']
+
 
 class DatosFacturacionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,7 +36,7 @@ class ClienteSerializer(serializers.ModelSerializer):
 class TrabajadorSerializer(serializers.ModelSerializer): 
     class Meta:
         model = Trabajador
-        fields = ['apellidos','nombre','dni','fecha_inicio','contacto','usuario','contrasenia','foto_perfil']
+        fields = ['dni','apellidos','nombre','fecha_inicio','contacto','usuario','contrasenia','foto_perfil']
 
 
 class CategoriaSerializer(serializers.ModelSerializer):
@@ -61,6 +69,12 @@ class  DetallePedidoSerializer(serializers.ModelSerializer):
         fields = ['producto', 'cantidad']
 
 
+class  AddDetallePedidoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DetallePedido
+        fields = ['id','cabeceraPedido','producto', 'cantidad']
+
+
 class  CabeceraPedidoSerializer(serializers.ModelSerializer):
     detalle_pedido = DetallePedidoSerializer(many=True)
     cliente = ClienteSerializer(many=False)
@@ -69,6 +83,21 @@ class  CabeceraPedidoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CabeceraPedido
         fields = ['id','cliente', 'trabajador', 'fecha_pedido', 'fecha_entrega','entregado','pagado','formaPago','descuento','monto','detalle_pedido']
+    
+
+class  AddCabeceraPedidoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CabeceraPedido
+        fields = ['id','cliente', 'trabajador', 'fecha_pedido', 'fecha_entrega','entregado','pagado','formaPago','descuento','monto']
+
+
+class  Trabajador_PedidosSerializer(serializers.ModelSerializer):
+    detalle_pedido = DetallePedidoSerializer(many=True)
+    cliente = ClienteSerializer(many=False)
+    formaPago = FormaPagoSerializer(many=False)
+    class Meta:
+        model = CabeceraPedido
+        fields = ['id','cliente', 'fecha_pedido', 'fecha_entrega','entregado','pagado','formaPago','descuento','monto','detalle_pedido']
 
 
 

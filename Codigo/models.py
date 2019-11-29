@@ -9,7 +9,7 @@ class Zona(models.Model):
         return self.descripcion
 
     class Meta:
-        verbose_name_plural = "Lista de Zonas"
+        verbose_name_plural = "Zonas"
         verbose_name = "Zona"
 
 
@@ -35,7 +35,7 @@ class Usuario(models.Model):
         return '%s %s' % (self.apellidos, self.nombre)
     
     class Meta:
-        verbose_name_plural = "Lista de Usuarios"
+        verbose_name_plural = "Usuarios"
         verbose_name = "Usuario"
 
 
@@ -47,10 +47,10 @@ class Cliente(Usuario):
     verificado = models.BooleanField()
 
     def __str__(self):
-        return '%s %s %s' % (self.nombre, self.apellidos, self.puntaje)
+        return '%s %s %s %s' % (self.dni, self.nombre, self.apellidos, self.puntaje)
 
     class Meta:
-        verbose_name_plural = "Lista de Clientes"
+        verbose_name_plural = "Clientes"
         verbose_name = "Cliente"
 
 
@@ -73,7 +73,7 @@ class Trabajador(Usuario):
     fecha_inicio = models.DateField()
     foto_perfil = models.ImageField()
     def __str__(self):
-        return '%s %s %s' % (self.nombre, self.apellidos, self.fecha_inicio)
+        return '%s %s %s' % (self.dni, self.nombre, self.apellidos)
     
     class Meta:
         verbose_name_plural = "Trabajadores"
@@ -101,7 +101,7 @@ class Marca(models.Model):
         return self.descripcion
     
     class Meta:
-        verbose_name_plural = "Lista de Marcas"
+        verbose_name_plural = "Marcas"
         verbose_name = "Marca"
 
 
@@ -112,7 +112,7 @@ class Categoria(models.Model):
         return self.descripcion
     
     class Meta:
-        verbose_name_plural = "Lista de Categorias"
+        verbose_name_plural = "Categorias"
         verbose_name = "Categoria"
 
 class FormaPago(models.Model):
@@ -138,7 +138,7 @@ class Producto(models.Model):
         return '%s %s %s' % (self.nombre, self.tipo, self.presentacion)
 
     class Meta:
-        verbose_name_plural = "Lista de Productos"
+        verbose_name_plural = "Productos"
         verbose_name = "Producto"
 
 class CabeceraPedido(models.Model):
@@ -152,9 +152,12 @@ class CabeceraPedido(models.Model):
     descuento = models.FloatField()
     monto = models.FloatField()
 
+    def __str__(self):
+        return 'Pedido: %s' % (self.id)
+
     class Meta:
-        verbose_name_plural = "Cabeceras de Pedidos"
-        verbose_name = "Cabecera de Pedido"
+        verbose_name_plural = "Pedidos"
+        verbose_name = "Pedido"
 
 
 class DetallePedido(models.Model):
