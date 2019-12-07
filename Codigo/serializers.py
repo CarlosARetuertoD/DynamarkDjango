@@ -108,5 +108,3 @@ class DetailFormaPagoSerializer(serializers.ModelSerializer):
 
 
 
-
-

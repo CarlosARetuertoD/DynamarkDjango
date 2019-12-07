@@ -79,3 +79,8 @@ class ZonaTrabajadorList(generics.ListAPIView):
 class FormaPagoList(generics.ListAPIView):
     serializer_class = DetailFormaPagoSerializer
     queryset = FormaPago.objects.all()
+
+
+class ProductoDetail(generics.RetrieveAPIView):
+    serializer_class = ProductosSerializer
+    queryset = Producto.objects.all()
