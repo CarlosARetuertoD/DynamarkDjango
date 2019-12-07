@@ -74,3 +74,8 @@ class ZonaTrabajadorList(generics.ListAPIView):
     def get_queryset(self):
         dni = self.kwargs['dni']
         return ZonaTrabajador.objects.filter(trabajador=dni)
+
+
+class FormaPagoList(generics.RetrieveAPIView):
+    serializer_class = FormaPagoSerializer
+    queryset = FormaPago.objects.all()

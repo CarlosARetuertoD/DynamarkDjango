@@ -7,6 +7,7 @@ urlpatterns = [
     path('cliente/<int:pk>', views.ClienteDetail.as_view()),
     path('productos/', views.ProductosList.as_view()),
     path('trabajadores/', views.TrabajadoresList.as_view()),
+    path('formaspago/', views.FormaPagoList.as_view()),
     path('zona/<int:pk>/', views.ZonaList.as_view()),
     path('zonatrabajador/<int:dni>/', views.ZonaTrabajadorList.as_view()),
     path('trabajador/<int:pk>/', views.TrabajadorDetail.as_view()),
