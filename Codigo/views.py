@@ -76,6 +76,6 @@ class ZonaTrabajadorList(generics.ListAPIView):
         return ZonaTrabajador.objects.filter(trabajador=dni)
 
 
-class FormaPagoList(generics.RetrieveAPIView):
-    serializer_class = FormaPagoSerializer
+class FormaPagoList(generics.ListAPIView):
+    serializer_class = DetailFormaPagoSerializer
     queryset = FormaPago.objects.all()

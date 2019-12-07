@@ -100,7 +100,7 @@ class  Trabajador_PedidosSerializer(serializers.ModelSerializer):
         fields = ['id','cliente', 'fecha_pedido', 'fecha_entrega','entregado','pagado','formaPago','descuento','monto','detalle_pedido']
 
 
-class FormaPagoSerializer(serializers.ModelSerializer): 
+class DetailFormaPagoSerializer(serializers.ModelSerializer): 
     class Meta:
         model = FormaPago
         fields = ['id','descripcion']
